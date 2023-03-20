@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WASM</title>
+    <!-- Required glue for golang wasm -->
+    <!-- The Makefile will install this file -->
+    <script type="text/javascript" src="assets/wasm_exec.js"></script>
+    <!-- This contains a single variable "wasm" with base64 code -->
+    <script type="text/javascript" src="assets/wasm.js"></script>
+
+    <script>
+
+      /* Mutex for golang function loading */
+      const memory = new WebAssembly.Memory({
+	  initial: 4,
+	  maximum: 4,
+	  shared: true,
+      });
+      const sab = memory.buffer
+      //const sab = new SharedArrayBuffer(1024);
+      const mutex = new Int32Array(sab);
+
+      /*
+	Wait for golang to load functions into javascript, put all the code
+	that needs golang functions in here.
+      */
+      async function waitForGolang() {
+	  const result = Atomics.waitAsync(mutex, 0, 0)
+	  result.value.then(
+	      (results) => {
+		  // All golang functions have now been loaded into javascript
+		  // console.log("Mutex value: " + mutex[0]); // 123
+		  console.log("golang loaded")
+		  debugit(green("green"))
+	      }
+	  );
+      }
+
+      waitForGolang()
+
+      // This function is called by golang when it is done.
+      async function golangFunctionsLoaded() {
+	  console.log("golangFunctionsLoaded")
+	  // console.log("Mutex value: " + mutex[0]); // 0;
+	  Atomics.store(mutex, 0, 123);
+	  Atomics.notify(mutex, 0, 1)
+      }
+
+      const go = new Go();
+      prog = "data:application/wasm;base64," + wasm
+      WebAssembly.instantiateStreaming(fetch(prog), go.importObject).then(
+	  (results) => {
+	      go.run(results.instance)
+	      console.log("golang loading ...")
+	  }
+      );
+
+    </script>
+
+    <script>
+      /* usage: <div id="debug"></div> */
+      function debugit(message, debug="debug") {
+	  var element = document.getElementById(debug);
+	  if (!element) {
+	      alert("No id=" + debug);
+	      return;
+	  }
+	  element.innerHTML = element.innerHTML + message + "<br/>";
+      }
+      </script>      
+
+  </head>
+  <body>
+      <h1>WebAssembly</h1>
+      <p>
+	If everything worked the word green should appear in green.
+      </p>
+
+      <div id="debug"></div>
+
+      <hr/>
+      <div>Last modified: Mon Mar 20 13:17:29 PDT 2023</div>
+  </body>
+</html>
+<!-- Local Variables: -->
+<!-- time-stamp-pattern: "-8/<div>Last modified:[ \t]+%3a %3b %02d %02H:%02M:%02S %Z %:y</div>" -->
+<!-- End: -->
