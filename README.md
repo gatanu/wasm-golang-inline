@@ -2,7 +2,7 @@
 
 
 **WARNING THIS EXAMPLE ONLY WORKS WITH THE CHROME BROWSER
-DUE TO ITS USE OF Atomics.waitAsync() for synchronization.**
+DUE TO ITS USE OF Atomics.waitAsync() for SYNCHRONIZATION.**
 
 Example WebAssembly (wasm) program in golang that can be loaded from
 local file system.
