@@ -21,7 +21,7 @@ your browser fetch() could access all the files in that directory
 including your downloaded bank statements. The examples then go on to
 show how to run a simple local web server.  I have no interest in
 running a local web server to work on local files. While looking
-around for a way around the problem, I came across the gem below [^inline] that
+around for a way around the problem, I came across the gem [^inline] that
 I used. The trick is to base64 encode the wasm then hand a data URL to
 fetch(). The Makefile creates a file assets/wasm.js that assigns a
 single variable wasm that can be loaded in the standard way.
@@ -87,9 +87,9 @@ golang binding is done, as well as syscall/js.
 # Conclusion
 
 Although WebAssembly has been around for a few years I found
-documentation and tools to be a little alpha, for example wabt (link
-below) could not disassemble the goland generated WebAssembly. In fact
-golang generated an opcode (link below) that I could not find in the
+documentation and tools to be a little alpha, for example wabt [^wabt]
+could not disassemble the goland generated WebAssembly. In fact
+golang generated an opcode [^opcode] that I could not find in the
 latest spec?
 
 In my opinion Mozilla provides the best documentation for web related
@@ -103,9 +103,8 @@ no runtime or garbage collector.
 * [Best WebAssembly documentation](https://developer.mozilla.org/en-US/docs/WebAssembly)
 * [Example code that served as initial template](https://golangbot.com/webassembly-using-go/)
 * [Data URL](https://developer.mozilla.org/en-US/docs/web/http/basics_of_http/data_urls)
-* [WebAssembly tool kit](https://github.com/WebAssembly/wabt)
-* [WebAssembly opcodes](https://webassembly.github.io/spec/core/bikeshed/#instructions%E2%91%A8)
 
 # Footnotes
 [^inline]: [How to load wasm locally](https://stackoverflow.com/questions/61052684/how-to-load-a-wasm-module-locally)
-	
+[^wabt]: [WebAssembly tool kit](https://github.com/WebAssembly/wabt)	
+[^opcode]: [WebAssembly opcodes](https://webassembly.github.io/spec/core/bikeshed/#instructions%E2%91%A8)
