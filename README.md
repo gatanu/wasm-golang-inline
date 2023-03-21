@@ -21,7 +21,7 @@ your browser fetch() could access all the files in that directory
 including your downloaded bank statements. The examples then go on to
 show how to run a simple local web server.  I have no interest in
 running a local web server to work on local files. While looking
-around for a way around the problem, I came across the gem below that
+around for a way around the problem, I came across the gem below [^inline] that
 I used. The trick is to base64 encode the wasm then hand a data URL to
 fetch(). The Makefile creates a file assets/wasm.js that assigns a
 single variable wasm that can be loaded in the standard way.
@@ -60,8 +60,8 @@ container. The original code in the Makefile was below.
 
 ```
 It turned out that under MacOS gmake uses /bin/sh not /bin/bash so the
-"-n" flag to echo doesn't work. Also the program base64 doesn't
-require any arguments to generate to generate a single line.
+"-n" flag to echo doesn't work. Also the program base64 always puts a
+newline at the end of the file, which is a disaster.
 
 # Tested
 ## Linux
@@ -75,6 +75,7 @@ require any arguments to generate to generate a single line.
 [Known issue Atomics.waitAsync](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics/waitAsync)
 
 # TODO
+- [] Replace the use of Atomics.waitAsync(), with something more portable
 - [] If an error occurs in the golang function when called from
 Javascript generate an idiomatic error (exception?).
 - [] Add an example to manipulate the DOM from golang
@@ -99,9 +100,12 @@ massive runtime. I suspect that going forward I will use rust or C/C++
 no runtime or garbage collector.
 
 # References
-- [Best WebAssembly documentation](https://developer.mozilla.org/en-US/docs/WebAssembly)
-- [Example code that served as initial template](https://golangbot.com/webassembly-using-go/)
-- [How to load wasm locally](https://stackoverflow.com/questions/61052684/how-to-load-a-wasm-module-locally)
-- [Data URL](https://developer.mozilla.org/en-US/docs/web/http/basics_of_http/data_urls)
-- [WebAssembly tool kit](https://github.com/WebAssembly/wabt)
-- [WebAssembly opcodes](https://webassembly.github.io/spec/core/bikeshed/#instructions%E2%91%A8)
+* [Best WebAssembly documentation](https://developer.mozilla.org/en-US/docs/WebAssembly)
+* [Example code that served as initial template](https://golangbot.com/webassembly-using-go/)
+* [Data URL](https://developer.mozilla.org/en-US/docs/web/http/basics_of_http/data_urls)
+* [WebAssembly tool kit](https://github.com/WebAssembly/wabt)
+* [WebAssembly opcodes](https://webassembly.github.io/spec/core/bikeshed/#instructions%E2%91%A8)
+
+# Footnotes
+[^inline]: [How to load wasm locally](https://stackoverflow.com/questions/61052684/how-to-load-a-wasm-module-locally)
+	
